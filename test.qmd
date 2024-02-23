@@ -1,6 +1,6 @@
 ---
 title: "test doc"
-author: "Thien An Tran", "Tejasree Kandibanda"
+author: "Thien An Tran", "Tejasree Kandibanda", "Matthew Huang"
 format: html
 editor: source
 embed-resources: true
