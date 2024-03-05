@@ -14,12 +14,16 @@ execute:
   warning: false
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+## Setup
 
 ```{r setup}
 library("tidyverse")
 ```
 
+## Data Cleaning
 
+###Pivoting Longer
+
+###Cleaning
+
+###Joining Datasets
