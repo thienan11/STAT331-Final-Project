@@ -18,9 +18,24 @@ execute:
 
 ```{r setup}
 library("tidyverse")
+murders <- read_csv("data/murder_total_deaths.csv")
+happiness <- read_csv("data/hapiscore_whr.csv")
+population <- read_csv("data/pop.csv")
 ```
 
 ## Data Cleaning
+
+Converting Murder Counts to observations
+```{r}
+
+murders_clean <- murders
+  
+
+
+
+```
+
+
 
 ###Pivoting Longer
 
