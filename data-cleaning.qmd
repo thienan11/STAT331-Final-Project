@@ -36,17 +36,28 @@ murders_clean <- murders
 ```
 
 ```{r}
+convert_population <- function(population_value) {
+  population_value <- as.character(population_value)
+  
+  multiplier <- case_when(
+    str_detect(population_value, "k") ~ 1e3,
+    str_detect(population_value, "M") ~ 1e6,
+    str_detect(population_value, "B") ~ 1e9,
+    TRUE ~ 1
+  )
+  
+  numeric_value <- as.numeric(str_remove_all(population_value, "[kMB]"))
+  
+  return(numeric_value * multiplier)
+}
+
 population_clean <- population |>
+  filter(country != "Holy See") |>
   select("country", "1905":"2019") |>
   pivot_longer(cols = "1905":"2019",
                names_to = "Year",
                values_to = "Population") |>
-  filter(country != "Holy See") |>
-  mutate(Population = case_when(
-    str_detect(Population, "M") ~ as.numeric(str_replace_all(Population, "M", "")) * 1000000,
-    str_detect(Population, "k") ~ as.numeric(str_replace_all(Population, "k", "")) * 1000,
-    TRUE ~ as.numeric(Population)
-  ))
+  mutate(across(Population, ~convert_population(.)))
 
 population_clean
 ```
