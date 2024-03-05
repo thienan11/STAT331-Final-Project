@@ -36,17 +36,17 @@ murders_clean <- murders
 ```
 
 ```{r}
-convert_population <- function(population_value) {
-  population_value <- as.character(population_value)
+convert_population <- function(pop_val) {
+  pop_val <- as.character(pop_val)
   
   multiplier <- case_when(
-    str_detect(population_value, "k") ~ 1e3,
-    str_detect(population_value, "M") ~ 1e6,
-    str_detect(population_value, "B") ~ 1e9,
+    str_detect(pop_val, "k") ~ 1e3,
+    str_detect(pop_val, "M") ~ 1e6,
+    str_detect(pop_val, "B") ~ 1e9,
     TRUE ~ 1
   )
   
-  numeric_value <- as.numeric(str_remove_all(population_value, "[kMB]"))
+  numeric_value <- as.numeric(str_remove_all(pop_val, "[kMB]"))
   
   return(numeric_value * multiplier)
 }
@@ -61,9 +61,5 @@ population_clean <- population |>
 
 population_clean
 ```
-
-###Pivoting Longer
-
-###Cleaning
 
 ###Joining Datasets
