@@ -18,54 +18,61 @@ execute:
 
 ```{r setup}
 library("tidyverse")
-murders <- read_csv("data/murder_total_deaths.csv")
+murder <- read_csv("data/murder_total_deaths.csv")
 happiness <- read_csv("data/hapiscore_whr.csv")
 population <- read_csv("data/pop.csv")
 ```
 
 ## Data Cleaning
 
-Converting Murder counts to numeric
 ```{r}
-murders_clean <- murders |> 
-  # filter the columns
-  select(country, `2005`:`2019`) |> 
-  # pivot
-  pivot_longer(cols = `2005`:`2019`,
-               names_to = "years",
-               values_to = "murder_count") |> 
-  mutate(murder_count = if_else(
-    str_detect(murder_count, "k"),
-    as.numeric(str_remove(murder_count, "k")) * 1000,
-    as.numeric(murder_count)
-  ))
-```
-
-```{r}
-convert_population <- function(pop_val) {
-  pop_val <- as.character(pop_val)
+convert_value <- function(val) {
+  val <- as.character(val)
   
   multiplier <- case_when(
-    str_detect(pop_val, "k") ~ 1e3,
-    str_detect(pop_val, "M") ~ 1e6,
-    str_detect(pop_val, "B") ~ 1e9,
+    str_detect(val, "k") ~ 1e3,
+    str_detect(val, "M") ~ 1e6,
+    str_detect(val, "B") ~ 1e9,
     TRUE ~ 1
   )
   
-  numeric_value <- as.numeric(str_remove_all(pop_val, "[kMB]"))
+  numeric_value <- as.numeric(str_remove_all(val, "[kMB]"))
   
   return(numeric_value * multiplier)
 }
+```
 
+Converting Murder counts to numeric
+```{r}
+murder_clean <- murder |>
+  select(country, `2005`:`2019`) |> 
+  pivot_longer(cols = `2005`:`2019`,
+               names_to = "year",
+               values_to = "murder_count") |> 
+  mutate(across(murder_count, ~convert_value(.)))
+
+murder_clean
+```
+
+```{r}
 population_clean <- population |>
-  filter(country != "Holy See") |>
-  select("country", "1905":"2019") |>
-  pivot_longer(cols = "1905":"2019",
-               names_to = "Year",
-               values_to = "Population") |>
-  mutate(across(Population, ~convert_population(.)))
+  select(country, `2005`:`2019`) |>
+  pivot_longer(cols = `2005`:`2019`,
+               names_to = "year",
+               values_to = "population") |>
+  mutate(across(population, ~convert_value(.)))
 
 population_clean
+```
+
+```{r}
+murder_pop_merged <- murder_clean |>
+  inner_join(population_clean, by = c("country", "year"))
+
+murder_rate_clean <- murder_pop_merged |>
+  mutate(murder_rate_per_100k = (murder_count / population) * 100000)
+
+murder_rate_clean
 ```
 
 ###Joining Datasets
