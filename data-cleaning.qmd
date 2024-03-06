@@ -1,6 +1,6 @@
 ---
 title: "data-cleaning"
-author: "Thien An Tran", "Tejasree Kandibanda", "Matthew Huang", "Chloe Anbarcioglu"
+author: "Thien An Tran, Tejasree Kandibanda, Matthew Huang, Chloe Anbarcioglu"
 format: 
   html:
     embed-resources: true
@@ -80,4 +80,4 @@ murder_rate_clean <- murder_pop_merged |>
 murder_rate_clean
 ```
 
-###Joining Datasets
+### Joining Datasets
