@@ -42,7 +42,8 @@ convert_value <- function(val) {
 }
 ```
 
-Converting Murder counts to numeric
+### Converting Murder Counts to Numeric
+
 ```{r}
 murder_clean <- murder |>
   select(country, `2005`:`2019`) |> 
@@ -54,6 +55,8 @@ murder_clean <- murder |>
 murder_clean
 ```
 
+### Converting Population to Numeric
+
 ```{r}
 population_clean <- population |>
   select(country, `2005`:`2019`) |>
@@ -64,6 +67,8 @@ population_clean <- population |>
 
 population_clean
 ```
+
+### Getting the Murder Rate for each Country and Year
 
 ```{r}
 murder_pop_merged <- murder_clean |>
