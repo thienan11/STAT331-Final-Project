@@ -14,6 +14,12 @@ execute:
   warning: false
 ---
 
+## Project Proposal
+
+For our project, we want to explore the relationship between murder rate and happiness score in each country per year. This can potentially give us insights into how societal well-being and security metrics interact.
+
+One thing that we are thinking of looking into is of course the correlation between happiness scores and murder rates across the data set. A negative correlation might suggest that higher murder rates are associated with lower happiness scores, potentially indicating that safety and security are significant factors in overall happiness.
+
 ## Setup
 
 ```{r setup}
@@ -23,9 +29,26 @@ happiness <- read_csv("data/hapiscore_whr.csv")
 population <- read_csv("data/pop.csv")
 ```
 
+All the data set we initially got are from gapminder.org.
+
+> **population**: contains total population counts of inhabitants for each country per year.
+
+> **murder**: contains total number of estimated deaths from interpersonal violence for each country per year.
+
+> **happiness**: contains happiness score (converted to 0 to 100 scale to be in terms of percentage) for each country per year.
+
 ## Data Cleaning
 
+In order to find the relationship between murder rates and happiness score for each country per year, we need to merge two data sets: a data set of murder rate per 100k people and a data set containing happiness scores.
+
+The first issue we ran into was how the data set of murder rate per 100k people on gapminder.org had a lot of missing values. To fix this, we had to merge a population data set (for each country per year) with a total murders data set (for each country per year).
+
 ### Value Conversion
+
+The function below helps us to convert all values into numbers (ie. fix cases such as `1.1k` to be `1100`).
+
+We apply this to both the population and total murders data set as they both contain values that need to be converted.
+
 ```{r}
 convert_value <- function(val) {
   val <- as.character(val)
@@ -71,6 +94,8 @@ population_clean
 
 ### Getting the Murder Rate for each Country and Year
 
+After cleaning the population and total murders data set, we can proceed to merging them to get a data set of the murder rate per 100k people for each country and year.
+
 ```{r}
 murder_pop_merged <- murder_clean |>
   inner_join(population_clean, by = c("country", "year"))
@@ -82,6 +107,8 @@ murder_rate_clean
 ```
 
 ### Transforming Happiness Data
+
+We use pivot longer to transform the happiness score data set so that it matches with the murder per 100k people data set we created.
 
 ```{r}
 happiness_clean <- happiness |>
@@ -97,6 +124,7 @@ happiness_clean
 
 ### Joining Datasets: Happiness Score Associated with Each Country
 
+Finally, we can merge the murder rate per 100k data set with the happiness score data set to get our final data set.
 
 ```{r}
 happiness_merged <- murder_rate_clean |>
@@ -108,6 +136,21 @@ happiness_merged
 ```{r}
 happiness_merged |>
   summarise(across(everything(), ~sum(is.na(.))))
+```
+
+### Final Dataset Description
+```{r}
+glimpse(happiness_merged)
+```
+The final data set contains 1,820 rows and 6 columns.
+
+The columns contains `country`, `year`, `murder_count`, `population`, `murder_rate_per_100k`, and `happiness_score`.
+
+It provides a comprehensive overview of the murder rates and happiness scores across various countries and years. Each entry in the data set corresponds to a unique combination of a country and a year (ranging from 2005 to 2019).
+
+### Output to CSV file
+```{r}
+# write.csv(happiness_merged, file="murder_happiness.csv", row.names=FALSE)
 ```
 
 
