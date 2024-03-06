@@ -25,14 +25,20 @@ population <- read_csv("data/pop.csv")
 
 ## Data Cleaning
 
-Converting Murder Counts to observations
+Converting Murder counts to numeric
 ```{r}
-
-murders_clean <- murders
-  
-
-
-
+murders_clean <- murders |> 
+  # filter the columns
+  select(country, `2005`:`2019`) |> 
+  # pivot
+  pivot_longer(cols = `2005`:`2019`,
+               names_to = "years",
+               values_to = "murder_count") |> 
+  mutate(murder_count = if_else(
+    str_detect(murder_count, "k"),
+    as.numeric(str_remove(murder_count, "k")) * 1000,
+    as.numeric(murder_count)
+  ))
 ```
 
 
