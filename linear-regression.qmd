@@ -19,12 +19,14 @@ code-fold: true
 
 ```{r}
 library(tidyverse)
-library(ggplot2)
+library(here)
+
+happiness_merged <- read_csv(here::here("data", "murder_happiness.csv"))
 ```
 
 ## Data Visualizations
 
-Plot 1:
+### Plot 1:
 
 ```{r}
 average_data <- happiness_merged |>
@@ -35,7 +37,7 @@ average_data <- happiness_merged |>
 ## Plot 1 code goes here
 ```
 
-Plot 2:
+### Plot 2:
 
 ```{r}
 ggplot(average_data, aes(x = avg_murder_rate, y = avg_happiness_score, color = country)) +
