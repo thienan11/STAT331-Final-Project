@@ -15,14 +15,14 @@ execute:
 code-fold: true
 ---
 
-## Setup
-
 ```{r}
+#| include: false
 library(tidyverse)
 library(here)
 library(gganimate)
+library(gifski)
 
-happiness_merged <- read_csv(here::here("data", "murder_happiness.csv"))
+murder_happiness <- read_csv(here::here("data", "murder_happiness.csv"))
 ```
 
 ## Data Visualizations
@@ -30,34 +30,44 @@ happiness_merged <- read_csv(here::here("data", "murder_happiness.csv"))
 ### Plot 1:
 
 ```{r}
-happiness_merged |>
-  group_by(year) |>
+murder_happiness_summary <- murder_happiness |>
+  group_by(country, year) |>
   summarise(avg_murder_rate = mean(murder_rate_per_100k),
             avg_happiness_score = mean(happiness_score)) |>
-  ggplot(aes(x = avg_murder_rate,
-             y = avg_happiness_score)) +
-    geom_point() +
-    geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +
-    labs(title = "Relationship Between Murder Rate and Happiness Score") +
-    theme_minimal()
+  ungroup()
+
+animated_plot <- ggplot(murder_happiness_summary,
+                        aes(x = avg_murder_rate,
+                            y = avg_happiness_score,
+                            color = as.factor(year))
+                        ) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
+       subtitle = "Average Happiness Score",
+       x = "Average Murder Rate per 100k People",
+       y = "",
+       color = "Year") +
+  transition_time(year) +
+  enter_fade() +
+  exit_fade()
+
+animate(animated_plot, renderer = gifski_renderer())
 ```
 
+### Plot 2:
+
 ```{r}
-happiness_merged |>
+murder_happiness |>
   group_by(country) |>
   summarise(avg_murder_rate = mean(murder_rate_per_100k),
             avg_happiness_score = mean(happiness_score)) |>
   ggplot(aes(x = avg_murder_rate, 
              y = avg_happiness_score)
          ) +
-    geom_point() +
-    geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +
+    geom_point(color = "steelblue") +
+    geom_smooth(method = "lm", se = FALSE, color = "black") +
     labs(title = "Relationship Between Murder Rate and Happiness Score",
          x = "Average Murder Rate (per 100k)", y = "Average Happiness Score") +
     theme_minimal()
 ```
-
-### Plot 2:
-
-
-
