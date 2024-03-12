@@ -30,44 +30,80 @@ murder_happiness <- read_csv(here::here("data", "murder_happiness.csv"))
 ### Plot 1:
 
 ```{r}
-murder_happiness_summary <- murder_happiness |>
-  group_by(country, year) |>
-  summarise(avg_murder_rate = mean(murder_rate_per_100k),
-            avg_happiness_score = mean(happiness_score)) |>
-  ungroup()
-
-animated_plot <- ggplot(murder_happiness_summary,
-                        aes(x = avg_murder_rate,
-                            y = avg_happiness_score,
-                            color = as.factor(year))
-                        ) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE, color = "black") +
-  labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
-       subtitle = "Average Happiness Score",
-       x = "Average Murder Rate (per 100k)",
-       y = "",
-       color = "Year") +
-  transition_time(year) +
-  enter_fade() +
-  exit_fade()
-
-animate(animated_plot, renderer = gifski_renderer())
+# murder_happiness_summary <- murder_happiness |>
+#   group_by(country, year) |>
+#   summarise(avg_murder_rate = mean(murder_rate_per_100k),
+#             avg_happiness_score = mean(happiness_score)) |>
+#   ungroup() 
+# 
+# animated_plot <- ggplot(murder_happiness_summary,
+#                         aes(x = avg_murder_rate,
+#                             y = avg_happiness_score,
+#                             color = as.factor(year))
+#                         ) +
+#   geom_point() +
+#   geom_smooth(method = "lm", color = "black") +
+#   labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
+#        subtitle = "Average Happiness Score",
+#        x = "Average Murder Rate (per 100k)",
+#        y = "",
+#        color = "Year") +
+#   transition_time(year) +
+#   enter_fade() +
+#   exit_fade()
+# 
+# animate(animated_plot, renderer = gifski_renderer())
 ```
 
 ### Plot 2:
 
 ```{r}
-murder_happiness |>
+country_murder_happiness <- murder_happiness |>
   group_by(country) |>
   summarise(avg_murder_rate = mean(murder_rate_per_100k),
-            avg_happiness_score = mean(happiness_score)) |>
+            avg_happiness_score = mean(happiness_score))
+
+country_murder_happiness |>
   ggplot(aes(x = avg_murder_rate, 
              y = avg_happiness_score)
          ) +
     geom_point(color = "steelblue") +
-    geom_smooth(method = "lm", se = FALSE, color = "black") +
+    geom_smooth(method = "lm", color = "black") +
     labs(title = "Relationship Between Murder Rate and Happiness Score",
-         x = "Average Murder Rate (per 100k)", y = "Average Happiness Score") +
+         subtitle = "Average Happiness Score",
+         x = "Average Murder Rate (per 100k)", 
+         y = "") +
     theme_minimal()
 ```
+
+
+### Linear Model:
+
+> x (explanatory): average murder rate per 100K people\
+> y (response): average happiness score
+
+```{r}
+lin_model <- lm(avg_happiness_score~avg_murder_rate, country_murder_happiness)
+summary(lin_model)
+```
+
+**Predicted Happiness Score = 54.37738 - 0.05908 x Average Murder Rate**
+
+Coefficient Interpretation:
+54.37738: The predicted happiness score is 54.37738 when murder rate is 0.
+-0.05908: The predicted happiness score decreases by 0.05908 points for each additional murder per 100k people.
+
+### Model Fit:
+
+```{r}
+
+var_response <- var(country_murder_happiness$avg_happiness_score)
+var_fitted <- var(lin_model$fitted.values)
+var_resid <- var(lin_model$residuals)
+explained_variation <- var_fitted/var_response
+
+explained_variation
+
+```
+
+The explained variation is 0.00315, which is almost 0. This means that murder rate explains almost none of the variability in happiness. Almost all of the variability in happiness is unaccounted for.
