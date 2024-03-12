@@ -45,7 +45,7 @@ animated_plot <- ggplot(murder_happiness_summary,
   geom_smooth(method = "lm", se = FALSE, color = "black") +
   labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
        subtitle = "Average Happiness Score",
-       x = "Average Murder Rate per 100k People",
+       x = "Average Murder Rate (per 100k)",
        y = "",
        color = "Year") +
   transition_time(year) +
