@@ -1,0 +1,50 @@
+---
+title: "STAT331 Final Project - Linear Regression"
+author: "Thien An Tran, Tejasree Kandibanda, Matthew Huang, Chloe Anbarcioglu"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    toc: true
+editor: source
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
+code-fold: true
+---
+
+## Setup
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+## Data Visualizations
+
+Plot 1:
+
+```{r}
+average_data <- happiness_merged |>
+  group_by(country, year) |>
+  summarise(avg_murder_rate = mean(murder_rate_per_100k),
+            avg_happiness_score = mean(happiness_score))
+
+## Plot 1 code goes here
+```
+
+Plot 2:
+
+```{r}
+ggplot(average_data, aes(x = avg_murder_rate, y = avg_happiness_score, color = country)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "black") +
+  labs(title = "Relationship Between Murder Rate and Happiness Score",
+       x = "Average Murder Rate (per 100k)", y = "Average Happiness Score") +
+  theme_minimal()
+
+
+```
+
