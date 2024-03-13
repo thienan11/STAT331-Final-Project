@@ -175,7 +175,7 @@ country_murder_happiness |>
          y = "") +
     theme_minimal()
 ```
-## This plot shows the relationship between the average murder rate per 100k for each country and their overall happiness score. Similar to our previous plot, there is not much correlation between the murder rate and happiness such as an increasing or decreasing happiness score based on the rate of murder.
+This plot shows the relationship between the average murder rate per 100k for each country and their overall happiness score. Similar to our previous plot, there is not much correlation between the murder rate and happiness such as an increasing or decreasing happiness score based on the rate of murder.
 
 ## Linear Regression
 
