@@ -102,8 +102,12 @@ var_fitted <- var(lin_model$fitted.values)
 var_resid <- var(lin_model$residuals)
 explained_variation <- var_fitted/var_response
 
-explained_variation
+table_data <- data.frame(
+  Variable = c("Response Variable Variance", "Fitted Values Variance", "Residuals Variance", "Explained Variation"),
+  Value = c(var_response, var_fitted, var_resid, explained_variation)
+)
 
+table_data
 ```
 
 The explained variation is 0.00315, which is almost 0. This means that murder rate explains almost none of the variability in happiness. Almost all of the variability in happiness is unaccounted for.

@@ -3165,10 +3165,19 @@ F-statistic: 0.5068 on 1 and 160 DF,  p-value: 0.4776</code></pre>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>var_resid <span class="ot">&lt;-</span> <span class="fu">var</span>(lin_model<span class="sc">$</span>residuals)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>explained_variation <span class="ot">&lt;-</span> var_fitted<span class="sc">/</span>var_response</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>explained_variation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>table_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">c</span>(<span class="st">&quot;Response Variable Variance&quot;</span>, <span class="st">&quot;Fitted Values Variance&quot;</span>, <span class="st">&quot;Residuals Variance&quot;</span>, <span class="st">&quot;Explained Variation&quot;</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">Value =</span> <span class="fu">c</span>(var_response, var_fitted, var_resid, explained_variation)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>table_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.003157329</code></pre>
+<pre><code>                    Variable        Value
+1 Response Variable Variance 1.147320e+02
+2     Fitted Values Variance 3.622466e-01
+3         Residuals Variance 1.143697e+02
+4        Explained Variation 3.157329e-03</code></pre>
 </div>
 </div>
 <p>The explained variation is 0.00315, which is almost 0. This means that murder rate explains almost none of the variability in happiness. Almost all of the variability in happiness is unaccounted for.</p>
@@ -3566,11 +3575,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>var_resid <span class="ot">&lt;-</span> <span class="fu">var</span>(lin_model<span class="sc">$</span>residuals)</span>
 <span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>explained_variation <span class="ot">&lt;-</span> var_fitted<span class="sc">/</span>var_response</span>
 <span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>explained_variation</span>
-<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>The explained variation is 0.00315, which is almost 0. This means that murder rate explains almost none of the variability in happiness. Almost all of the variability in happiness is unaccounted for.</span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>table_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>  <span class="at">Variable =</span> <span class="fu">c</span>(<span class="st">&quot;Response Variable Variance&quot;</span>, <span class="st">&quot;Fitted Values Variance&quot;</span>, <span class="st">&quot;Residuals Variance&quot;</span>, <span class="st">&quot;Explained Variation&quot;</span>),</span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>  <span class="at">Value =</span> <span class="fu">c</span>(var_response, var_fitted, var_resid, explained_variation)</span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>table_data</span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>The explained variation is 0.00315, which is almost 0. This means that murder rate explains almost none of the variability in happiness. Almost all of the variability in happiness is unaccounted for.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
