@@ -42,7 +42,7 @@ We obtained our data from Gapminder @Gapminder.
 
 > **population**: contains total population counts for each country per year.\
 > **murder**: contains total number of estimated deaths from interpersonal violence for each country per year.\
-> **happiness**: contains happiness score (converted to 0 to 100 scale to be in terms of percentage) for each country per year.\
+> **happiness**: contains happiness score (converted to 0 to 100 scale to be in terms of percentage) for each country per year.
 
 # Data Cleaning
 
@@ -173,8 +173,8 @@ country_murder_happiness |>
 
 # Linear Regression
 
-> x (explanatory): average murder rate per 100K people\
-> y (response): average happiness score
+> **x (explanatory)**: average murder rate per 100K people\
+> **y (response)**: average happiness score
 
 ```{r}
 #| output: false
