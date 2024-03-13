@@ -27,7 +27,7 @@ murder_happiness <- read_csv(here::here("data", "murder_happiness.csv"))
 
 ## Data Visualizations
 
-### Plot 1:
+## Relationship between Murder Rate and Happiness Over Time
 
 ```{r}
 # murder_happiness_summary <- murder_happiness |>
@@ -55,7 +55,7 @@ murder_happiness <- read_csv(here::here("data", "murder_happiness.csv"))
 # animate(animated_plot, renderer = gifski_renderer())
 ```
 
-### Plot 2:
+## Relationship Between Murder Rate and Happiness
 
 ```{r}
 country_murder_happiness <- murder_happiness |>
