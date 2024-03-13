@@ -1,0 +1,206 @@
+---
+title: "STAT331 Final Project Report"
+author: "Thien An Tran, Tejasree Kandibanda, Matthew Huang, Chloe Anbarcioglu"
+format: 
+  html:
+    embed-resources: true
+    code-tools: true
+    toc: true
+editor: source
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
+code-fold: true
+references:
+- type: website
+  id: Gapminder
+  URL: https://www.gapminder.org/data/
+  language: en-US
+---
+
+# Introduction
+
+For our project, we want to explore the relationship between murder rate and happiness score in each country per year. We hypothesize that there will be a negative correlation between the two meaning that the higher the murder rates, the lower happiness scores. This could potentially indicate that safety and security are significant factors in overall happiness.
+
+```{r}
+#| include: false
+library(tidyverse)
+library(here)
+library(gganimate)
+library(gifski)
+
+murder <- read_csv("data/murder_total_deaths.csv")
+happiness <- read_csv("data/hapiscore_whr.csv")
+population <- read_csv("data/pop.csv")
+
+murder_happiness <- read_csv(here::here("data", "murder_happiness.csv"))
+```
+
+We obtained our data from Gapminder @Gapminder.
+
+> **population**: contains total population counts for each country per year.\
+> **murder**: contains total number of estimated deaths from interpersonal violence for each country per year.\
+> **happiness**: contains happiness score (converted to 0 to 100 scale to be in terms of percentage) for each country per year.\
+
+# Data Cleaning
+
+In order to find the relationship between murder rates and happiness score for each country per year, we need to merge the total murders data set and population data set. That way, we can get the murder rate per 100K people.
+
+::: callout-note
+We first have to convert all the values into numbers (i.e. fix cases such as `1.1k` to be `1100`).
+:::
+
+```{r}
+#| output: false
+convert_value <- function(val) {
+  val <- as.character(val)
+  
+  multiplier <- case_when(
+    str_detect(val, "k") ~ 1e3,
+    str_detect(val, "M") ~ 1e6,
+    str_detect(val, "B") ~ 1e9,
+    TRUE ~ 1
+  )
+  
+  numeric_value <- as.numeric(str_remove_all(val, "[kMB]"))
+  
+  return(numeric_value * multiplier)
+}
+
+murder_clean <- murder |>
+  select(country, `2005`:`2019`) |> 
+  pivot_longer(cols = `2005`:`2019`,
+               names_to = "year",
+               values_to = "murder_count") |> 
+  mutate(across(murder_count, ~convert_value(.)))
+
+murder_clean
+
+population_clean <- population |>
+  select(country, `2005`:`2019`) |>
+  pivot_longer(cols = `2005`:`2019`,
+               names_to = "year",
+               values_to = "population") |>
+  mutate(across(population, ~convert_value(.)))
+
+population_clean
+```
+
+After cleaning the total murders and population data set, we can proceed to merging them to get a data set of the murder rate per 100k people for each country and year. We cna then use pivot longer to transform the happiness score data set and merge it with the murder rate per 100k data set to get our final data set.
+
+```{r}
+murder_pop_merged <- murder_clean |>
+  inner_join(population_clean, by = c("country", "year"))
+
+murder_rate_clean <- murder_pop_merged |>
+  mutate(murder_rate_per_100k = (murder_count / population) * 100000)
+
+happiness_clean <- happiness |>
+  select(country, `2005`:`2019`) |>
+  pivot_longer(cols = `2005`:`2019`,
+               names_to = "year",
+               values_to = "happiness_score") |>
+   drop_na(happiness_score)
+
+happiness_merged <- murder_rate_clean |>
+  inner_join(happiness_clean, by = c("country", "year"))
+
+happiness_merged |>
+  head() |>
+  knitr::kable(digits = 4) 
+```
+
+## Final Dataset
+
+The final data set contains 1,820 rows and 6 columns.
+
+The columns are `country`, `year`, `murder_count`, `population`, `murder_rate_per_100k`, and `happiness_score`.
+
+It provides a comprehensive overview of the murder rates and happiness scores across various countries and years. Each entry in the data set corresponds to a unique combination of a country and a year (ranging from 2005 to 2019).
+
+# Data Visualizations
+
+## Plot 1
+
+```{r}
+murder_happiness_summary <- murder_happiness |>
+  group_by(country, year) |>
+  summarise(avg_murder_rate = mean(murder_rate_per_100k),
+            avg_happiness_score = mean(happiness_score)) |>
+  ungroup()
+
+animated_plot <- ggplot(murder_happiness_summary,
+                        aes(x = avg_murder_rate,
+                            y = avg_happiness_score,
+                            color = as.factor(year))
+                        ) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "black") +
+  labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
+       subtitle = "Average Happiness Score",
+       x = "Average Murder Rate (per 100k)",
+       y = "",
+       color = "Year") +
+  transition_time(year) +
+  enter_fade() +
+  exit_fade()
+
+animate(animated_plot, renderer = gifski_renderer())
+```
+
+## Plot 2
+
+```{r}
+country_murder_happiness <- murder_happiness |>
+  group_by(country) |>
+  summarise(avg_murder_rate = mean(murder_rate_per_100k),
+            avg_happiness_score = mean(happiness_score))
+
+country_murder_happiness |>
+  ggplot(aes(x = avg_murder_rate, 
+             y = avg_happiness_score)
+         ) +
+    geom_point(color = "steelblue") +
+    geom_smooth(method = "lm", color = "black") +
+    labs(title = "Relationship Between Murder Rate and Happiness Score",
+         subtitle = "Average Happiness Score",
+         x = "Average Murder Rate (per 100k)", 
+         y = "") +
+    theme_minimal()
+```
+
+# Linear Regression
+
+> x (explanatory): average murder rate per 100K people\
+> y (response): average happiness score
+
+```{r}
+#| output: false
+linear_model <- lm(avg_happiness_score~avg_murder_rate, country_murder_happiness)
+summary(linear_model)
+```
+
+**Predicted Happiness Score = 54.37738 - 0.05908 x Average Murder Rate**
+
+According to the linear regression model, when the murder rate is zero, the predicted happiness score is estimated to be 54.38. Additionally, the analysis suggests that for each additional murder per 100,000 people, the predicted happiness score decreases by approximately 0.0591 points.
+
+## Model Fit
+
+```{r}
+var_response <- var(country_murder_happiness$avg_happiness_score)
+var_fitted <- var(linear_model$fitted.values)
+var_resid <- var(linear_model$residuals)
+explained_variation <- var_fitted/var_response
+
+table_data <- data.frame(
+  Variable = c("Response Variable Variance", "Fitted Values Variance", "Residuals Variance", "Explained Variation"),
+  Value = c(var_response, var_fitted, var_resid, explained_variation)
+)
+
+table_data |>
+  knitr::kable(digits = 4) 
+```
+
+The explained variation is 0.00315, which is almost 0. This means that murder rate explains almost none of the variability in happiness. Almost all of the variability in happiness is unaccounted for.
