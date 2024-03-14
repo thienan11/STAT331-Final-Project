@@ -122,9 +122,11 @@ It provides a comprehensive overview of the murder rates and happiness scores ac
 
 ## 2. Linear Regression
 
-In this part, we will be visualizing the relationship between our two quantitative variables, murder rates in each country compared with their overall happiness score. We want to see if our hypothesis from above holds true and whether there is a negative correlation between the two variables.
+In this part, we will use linear regression to model the relationship between our two quantitative variables, murder rate and happiness score. We want to see if our hypothesis from above holds true and whether there is a negative correlation between the two variables.
 
 # Data Visualizations
+
+Here, we will be creating two data visualizations that explore the relationship between our two quantitative variables, murder rates in each country compared with their overall happiness score.
 
 ## Relationship between Murder Rate and Happiness Over Time
 
