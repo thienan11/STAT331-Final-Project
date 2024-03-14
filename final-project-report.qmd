@@ -120,15 +120,13 @@ The columns are `country`, `year`, `murder_count`, `population`, `murder_rate_pe
 
 It provides a comprehensive overview of the murder rates and happiness scores across various countries and years. Each entry in the data set corresponds to a unique combination of a country and a year (ranging from 2005 to 2019).
 
-## 2. Linear Regression
+# 2. Linear Regression
 
-In this part, we will use linear regression to model the relationship between our two quantitative variables, murder rate and happiness score. We want to see if our hypothesis from above holds true and whether there is a negative correlation between the two variables.
+In this part, we will be visualizing the relationship between our two quantitative variables, murder rates in each country compared with their overall happiness score. We want to see if our hypothesis from above holds true and whether there is a negative correlation between the two variables.
 
-# Data Visualizations
+## Data Visualizations
 
-Here, we will be creating two data visualizations that explore the relationship between our two quantitative variables, murder rates in each country compared with their overall happiness score.
-
-## Relationship between Murder Rate and Happiness Over Time
+### Relationship between Murder Rate and Happiness Score Over Time
 
 ```{r}
 murder_happiness_summary <- murder_happiness |>
@@ -155,9 +153,10 @@ animated_plot <- ggplot(murder_happiness_summary,
 
 animate(animated_plot, renderer = gifski_renderer())
 ```
+
 In this visualization, we have plotted the murder rate per 100k people versus the happiness score from 2005 to 2019 for each country. Contrary to our initial prediction of seeing a negative correlation, as in having lower murder rates for a higher happiness score, we see that there's not much of a correlation between the two. The average murder rate is mostly between 0%-25% for each year and the happiness score has a wide range from 20-80 with no apparent correlation.
 
-## Relationship Between Murder Rate and Happiness
+### Relationship Between Murder Rate and Happiness Score
 
 ```{r}
 country_murder_happiness <- murder_happiness |>
@@ -177,13 +176,14 @@ country_murder_happiness |>
          y = "") +
     theme_minimal()
 ```
+
 This plot shows the relationship between the average murder rate per 100k for each country and their overall happiness score. Similar to our previous plot, there is not much correlation between the murder rate and happiness such as an increasing or decreasing happiness score based on the rate of murder.
 
 ## Linear Regression
 
 We will be using linear regression as a statistical method to model the relationship between murder rate and happiness score. Then we will use this to evaluate the model fit.
 
-> **x (explanatory)**: average murder rate per 100K people
+> **x (explanatory)**: average murder rate per 100K people\
 > **y (response)**: average happiness score
 
 ```{r}
