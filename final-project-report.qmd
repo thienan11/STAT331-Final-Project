@@ -128,7 +128,7 @@ In this part, we will use linear regression to model the relationship between ou
 
 ## Data Visualizations
 
-Here, we will be creating two data visualizations that explore the relationship between our two quantitative variables.
+Here, we will be creating two data visualizations that explore the relationship between our two quantitative variables. Through creative visualizations, we aim to gain a deeper understanding of the relationship between the variables and uncover any interesting patterns or trends that may emerge over time and across countries.
 
 ### Relationship between Murder Rate and Happiness Score Over Time
 
@@ -221,15 +221,19 @@ table_data |>
 The explained variation is 0.00315, which is almost 0. This means that murder rate explains almost none of the variability in happiness. Almost all of the variability in happiness is unaccounted for.
 
 # 3. Simulation
+
+In this section, we aim to evaluate the performance of our linear regression model by comparing the observed data to simulated data generated using the model's predictions. By simulating data in this manner, we can assess how well the linear regression model captures the underlying relationship between the explanatory and response variables.
+
 ```{r}
 predictions <- predict(linear_model, country_murder_happiness)
 residual_se <- sigma(linear_model)
 simulated_y <- predictions + rnorm(n = length(predictions), mean = 0, sd = residual_se)
 ```
 
+The comparison between the observed and simulated data will be visualized through side-by-side plots showcasing the relationships modeled by the linear regression for both data sets.
+
 ```{r}
-# Plot Observed Data
-p1 <- ggplot(country_murder_happiness, 
+observed <- ggplot(country_murder_happiness, 
              aes(x = avg_murder_rate, 
                  y = avg_happiness_score)
              ) +
@@ -241,7 +245,7 @@ p1 <- ggplot(country_murder_happiness,
   theme_bw()
 
 # Plot Simulated Data
-p2 <- ggplot(country_murder_happiness, 
+predicted <- ggplot(country_murder_happiness, 
              aes(x = avg_murder_rate, 
                  y = simulated_y)
              ) +
@@ -252,8 +256,7 @@ p2 <- ggplot(country_murder_happiness,
        y = "") +
   theme_bw()
 
-# Combine plots with patchwork
-p1 + p2
+observed + predicted
 ```
 
 Both the simulated and observed data show clustering at lower murder rates, suggesting a possible non-linear relationship or threshold effect not captured by the linear prediction. However, the simulated data seems to have higher predicted happiness scores at lower murder rates. This discrepency implies that a linear model provides a simplified representation of the relationship between variables, but it may not accurately capture all the variability and intricacies present in the data set. Therefore, relying solely on a linear model might lead to incomplete or inaccurate conclusions about the underlying phenomena being studied.
