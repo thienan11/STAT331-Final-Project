@@ -24,12 +24,13 @@ references:
 
 For our project, we want to explore the relationship between murder rate and happiness score in each country per year. We hypothesize that there will be a negative correlation between the two meaning that the higher the murder rates, the lower happiness scores. This could potentially indicate that safety and security are significant factors in overall happiness.
 
-```{r}
+```{r setup}
 #| include: false
 library(tidyverse)
 library(here)
 library(gganimate)
 library(gifski)
+library(patchwork)
 
 murder <- read_csv("data/murder_total_deaths.csv")
 happiness <- read_csv("data/hapiscore_whr.csv")
@@ -126,7 +127,7 @@ In this part, we will use linear regression to model the relationship between ou
 
 ## Data Visualizations
 
-Here, we will be creating two data visualizations that explore the relationship between our two quantitative variables, murder rates in each country compared with their overall happiness score.
+Here, we will be creating two data visualizations that explore the relationship between our two quantitative variables.
 
 ### Relationship between Murder Rate and Happiness Score Over Time
 
@@ -150,6 +151,7 @@ animated_plot <- ggplot(murder_happiness_summary,
   transition_time(year) +
   enter_fade() +
   exit_fade() +
+  theme_bw() +
   theme(plot.caption = element_text(size = 10))
 
 animate(animated_plot, renderer = gifski_renderer())
@@ -175,7 +177,7 @@ country_murder_happiness |>
          subtitle = "Average Happiness Score",
          x = "Average Murder Rate (per 100k)", 
          y = "") +
-    theme_minimal()
+    theme_bw()
 ```
 
 This plot shows the relationship between the average murder rate per 100k for each country and their overall happiness score. Similar to our previous plot, there is not much correlation between the murder rate and happiness such as an increasing or decreasing happiness score based on the rate of murder.
@@ -217,5 +219,39 @@ table_data |>
 
 The explained variation is 0.00315, which is almost 0. This means that murder rate explains almost none of the variability in happiness. Almost all of the variability in happiness is unaccounted for.
 
+# 3. Simulation
+```{r}
+predictions <- predict(linear_model, country_murder_happiness)
+residual_se <- sigma(linear_model)
+simulated_y <- predictions + rnorm(n = length(predictions), mean = 0, sd = residual_se)
+```
 
+```{r}
+# Plot Observed Data
+p1 <- ggplot(country_murder_happiness, 
+             aes(x = avg_murder_rate, 
+                 y = avg_happiness_score)
+             ) +
+  geom_point(color = "steelblue") +
+  labs(title = "Observed Data",
+       subtitle = "Average Happiness Score",
+       x = "Average Murder Rate", 
+       y = "") +
+  theme_bw()
+
+# Plot Simulated Data
+p2 <- ggplot(country_murder_happiness, 
+             aes(x = avg_murder_rate, 
+                 y = simulated_y)
+             ) +
+  geom_point(color = "orange3") +
+  labs(title = "Predicted Data",
+       subtitle = "Predicted Happiness Score",
+       x = "Average Murder Rate", 
+       y = "") +
+  theme_bw()
+
+# Combine plots with patchwork
+p1 + p2
+```
 
