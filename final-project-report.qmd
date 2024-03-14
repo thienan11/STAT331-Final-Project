@@ -238,7 +238,7 @@ observed <- ggplot(country_murder_happiness,
              ) +
   geom_point(color = "steelblue") +
   labs(title = "Observed Data",
-       subtitle = "Average Happiness Score",
+       subtitle = "Observed Happiness Score",
        x = "Average Murder Rate", 
        y = "") +
   theme_bw()
@@ -249,8 +249,8 @@ predicted <- ggplot(country_murder_happiness,
                  y = simulated_y)
              ) +
   geom_point(color = "orange3") +
-  labs(title = "Predicted Data",
-       subtitle = "Predicted Happiness Score",
+  labs(title = "Simulated Data",
+       subtitle = "Simulated Happiness Score",
        x = "Average Murder Rate", 
        y = "") +
   theme_bw()
