@@ -120,14 +120,11 @@ The columns are `country`, `year`, `murder_count`, `population`, `murder_rate_pe
 
 It provides a comprehensive overview of the murder rates and happiness scores across various countries and years. Each entry in the data set corresponds to a unique combination of a country and a year (ranging from 2005 to 2019).
 
-## 2. Linear Regression
+# 2. Linear Regression
 
-In this part, we will use linear regression to model the relationship between our two quantitative variables, murder rate and happiness score. We want to see if our hypothesis from above holds true and whether there is a negative correlation between the two variables.
+In this part, we will be visualizing the relationship between our two quantitative variables, murder rates in each country compared with their overall happiness score. We want to see if our hypothesis from above holds true and whether there is a negative correlation between the two variables.
 
 ## Data Visualizations
-
-Here, we will be creating two data visualizations that explore the relationship between our two quantitative variables, murder rates in each country compared with their overall happiness score.
-
 
 ### Relationship between Murder Rate and Happiness Score Over Time
 
@@ -140,8 +137,7 @@ murder_happiness_summary <- murder_happiness |>
 
 animated_plot <- ggplot(murder_happiness_summary,
                         aes(x = avg_murder_rate,
-                            y = avg_happiness_score,
-                            color = as.factor(year))
+                            y = avg_happiness_score)
                         ) +
   geom_point() +
   geom_smooth(method = "lm", color = "black") +
@@ -149,7 +145,7 @@ animated_plot <- ggplot(murder_happiness_summary,
        subtitle = "Average Happiness Score",
        x = "Average Murder Rate (per 100k)",
        y = "",
-       color = "Year") +
+       caption = "Year: {frame_time}") +
   transition_time(year) +
   enter_fade() +
   exit_fade()
@@ -192,7 +188,8 @@ We will be using linear regression as a statistical method to model the relation
 ```{r}
 #| output: false
 linear_model <- lm(avg_happiness_score~avg_murder_rate, country_murder_happiness)
-summary(linear_model)
+broom::tidy(linear_model) |>
+  knitr::kable(digits = 4)
 ```
 
 **Predicted Happiness Score = 54.37738 - 0.05908 x Average Murder Rate**
