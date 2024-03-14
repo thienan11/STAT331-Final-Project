@@ -92,6 +92,7 @@ population_clean
 After cleaning the total murders and population data set, we can proceed to merging them to get a data set of the murder rate per 100k people for each country and year. We can then use pivot longer to transform the happiness score data set and merge it with the murder rate per 100k data set to get our final data set.
 
 ```{r}
+#| output: false
 murder_pop_merged <- murder_clean |>
   inner_join(population_clean, by = c("country", "year"))
 
@@ -119,7 +120,7 @@ The final data set contains 1,820 rows and 6 columns.
 
 The columns are `country`, `year`, `murder_count`, `population`, `murder_rate_per_100k`, and `happiness_score`.
 
-It provides a comprehensive overview of the murder rates and happiness scores across various countries and years. Each entry in the data set corresponds to a unique combination of a country and a year (ranging from 2005 to 2019).
+It provides a comprehensive overview of the murder rates and happiness scores across various countries and years. Each entry in the data set corresponds to a unique combination of a country and a year ranging from 2005 to 2019.
 
 # 2. Linear Regression
 
@@ -196,9 +197,9 @@ broom::tidy(linear_model) |>
   knitr::kable(digits = 4)
 ```
 
-**Predicted Happiness Score = 54.37738 - 0.05908 x Average Murder Rate**
+**Predicted Happiness Score = 54.3774 - 0.0591 x Average Murder Rate**
 
-According to the linear regression model, when the murder rate is zero, the predicted happiness score is estimated to be 54.38. Additionally, the analysis suggests that for each additional murder per 100,000 people, the predicted happiness score decreases by approximately 0.0591 points.
+According to the linear regression model, when the murder rate is zero, the predicted happiness score is estimated to be 54.3774. Additionally, the analysis suggests that for each additional murder per 100,000 people, the predicted happiness score decreases by approximately 0.0591 points.
 
 ## Model Fit
 
@@ -255,3 +256,4 @@ p2 <- ggplot(country_murder_happiness,
 p1 + p2
 ```
 
+Both the simulated and observed data show clustering at lower murder rates, suggesting a possible non-linear relationship or threshold effect not captured by the linear prediction. However, the simulated data seems to have higher predicted happiness scores at lower murder rates. This implies that a linear model provides a simplified representation of the relationship between variables, but it may not accurately capture all the variability and intricacies present in the data set. Therefore, relying solely on a linear model might lead to incomplete or inaccurate conclusions about the underlying phenomena being studied.
