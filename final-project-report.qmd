@@ -285,4 +285,4 @@ ggplot(hist_data, aes(x = R_squared)) +
        subtitle = "Number of Simulated Models")
 
 ```
-
+The histogram shows a right-skewed distribution with a higher frequency on the left side and shorter bars as it moves to the right. We see that the simulated datasets have R-squared values between 0 and 0.075. This suggests that the simulated data shows less variability in happiness scores when comparing with the observed data. It is difficult to ascertain on average how much our simulated data account for the variability in the observed happiness score. But from the graph, one could estimate on average it accounts for <1.25% of the variability in the observed happiness score. The spread of the data also has a narrow spread with values concentrated close to 0, which indicates that the simulated data resembles the observed data.
