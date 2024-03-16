@@ -274,15 +274,15 @@ simulated_datasets <- map(simulated_datasets, na.omit)
 # Regress the observed dataset against each simulated dataset and extract R-squared values
 r_squared_values <- map_dbl(simulated_datasets, ~ summary(lm(avg_happiness_score ~ avg_murder_rate, data = .x))$r.squared)
 
-# Create a data frame for the histogram
+# Plot distribution of R-squared values
 hist_data <- data.frame(R_squared = r_squared_values)
 
-# Plot the histogram using ggplot
 ggplot(hist_data, aes(x = R_squared)) +
   geom_histogram(fill = "steelblue", color = "black", bins = 30) +
   labs(title = "Distribution of R-squared Values",
-       x = "R-squared Value",
-       y = "Frequency")
+       x = "Simulated R-squared",
+       y = "",
+       subtitle = "Number of Simulated Models")
 
 ```
 
