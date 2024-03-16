@@ -279,8 +279,8 @@ hist_data <- data.frame(R_squared = r_squared_values)
 
 ggplot(hist_data, aes(x = R_squared)) +
   geom_histogram(fill = "steelblue", color = "black", bins = 30) +
-  labs(title = "Distribution of R-squared Values",
-       x = "Simulated R-squared",
+  labs(title = expression("Distribution of"~ R^2 ~"Values"),
+       x = expression("Simulated"~ R^2),
        y = "",
        subtitle = "Number of Simulated Models")
 
