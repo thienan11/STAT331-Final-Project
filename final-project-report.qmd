@@ -31,6 +31,7 @@ library(here)
 library(gganimate)
 library(gifski)
 library(patchwork)
+library(purrr)
 
 murder <- read_csv("data/murder_total_deaths.csv")
 happiness <- read_csv("data/hapiscore_whr.csv")
@@ -259,3 +260,29 @@ observed + predicted
 ```
 
 Both the simulated and observed data show clustering at lower murder rates, suggesting a possible non-linear relationship or threshold effect not captured by the linear prediction. However, the simulated data seems to have higher predicted happiness scores at lower murder rates. This discrepancy implies that a linear model provides a simplified representation of the relationship between variables, but it may not accurately capture all the variability and intricacies present in the data set. Therefore, relying solely on a linear model might lead to incomplete or inaccurate conclusions about the underlying phenomena being studied.
+
+## Generating Multiple Predictive Checks
+
+```{r}
+simulated_ys <- map(1:1000, ~ predictions + rnorm(n = length(predictions), mean = 0, sd = residual_se))
+
+simulated_datasets <- map(simulated_ys, ~ data.frame(avg_murder_rate = country_murder_happiness$avg_murder_rate, avg_happiness_score = .x))
+
+# Remove observations with missing values
+simulated_datasets <- map(simulated_datasets, na.omit)
+
+# Regress the observed dataset against each simulated dataset and extract R-squared values
+r_squared_values <- map_dbl(simulated_datasets, ~ summary(lm(avg_happiness_score ~ avg_murder_rate, data = .x))$r.squared)
+
+# Create a data frame for the histogram
+hist_data <- data.frame(R_squared = r_squared_values)
+
+# Plot the histogram using ggplot
+ggplot(hist_data, aes(x = R_squared)) +
+  geom_histogram(fill = "steelblue", color = "black", bins = 30) +
+  labs(title = "Distribution of R-squared Values",
+       x = "R-squared Value",
+       y = "Frequency")
+
+```
+
