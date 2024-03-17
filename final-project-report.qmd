@@ -6,6 +6,7 @@ format:
     embed-resources: true
     code-tools: true
     toc: true
+    number-sections: true
 editor: source
 execute: 
   error: true
@@ -46,7 +47,10 @@ We obtained our data from Gapminder @Gapminder.
 > **murder**: contains total number of estimated deaths from interpersonal violence for each country per year.\
 > **happiness**: contains happiness score (converted to 0 to 100 scale to be in terms of percentage) for each country per year.
 
-# 1. Data Cleaning
+## Hypothesized Relationship
+asdfadsf
+
+## Data Cleaning
 
 In order to find the relationship between murder rates and happiness score for each country per year, we need to merge the total murders data set and population data set. That way, we can get the murder rate per 100K people.
 
@@ -115,15 +119,13 @@ happiness_merged |>
   knitr::kable(digits = 4) 
 ```
 
-## Final Dataset
-
 The final data set contains 1,820 rows and 6 columns.
 
 The columns are `country`, `year`, `murder_count`, `population`, `murder_rate_per_100k`, and `happiness_score`.
 
 It provides a comprehensive overview of the murder rates and happiness scores across various countries and years. Each entry in the data set corresponds to a unique combination of a country and a year ranging from 2005 to 2019.
 
-# 2. Linear Regression
+# Linear Regression
 
 In this part, we will use linear regression to model the relationship between our two quantitative variables, murder rate and happiness score. We want to see if our hypothesis from above holds true and whether there is a negative correlation between the two variables.
 
@@ -220,7 +222,7 @@ table_data |>
 
 The explained variation is 0.00315, which is almost 0. This means that murder rate explains almost none of the variability in happiness. Almost all of the variability in happiness is unaccounted for.
 
-# 3. Simulation
+# Simulation
 
 In this section, we aim to evaluate the performance of our linear regression model by comparing the observed data to simulated data generated using the model's predictions. By simulating data in this manner, we can assess how well the linear regression model captures the underlying relationship between the explanatory and response variables.
 
@@ -286,3 +288,9 @@ ggplot(hist_data, aes(x = R_squared)) +
 
 ```
 The histogram shows a right-skewed distribution with a higher frequency on the left side and shorter bars as it moves to the right. We see that the simulated datasets have R-squared values between 0 and 0.075. This suggests that the simulated data shows less variability in happiness scores when comparing with the observed data. It is difficult to ascertain on average how much our simulated data account for the variability in the observed happiness score. But from the graph, one could estimate on average it accounts for <1.25% of the variability in the observed happiness score. The spread of the data also has a narrow spread with values concentrated close to 0, which indicates that the simulated data resembles the observed data.
+
+# Conclusion
+
+In the end...
+
+
