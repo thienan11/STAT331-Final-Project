@@ -21,6 +21,14 @@ references:
   language: en-US
 ---
 
+
+TODO:
+- update interpretations to log of average murder rate
+- add region colors to plots
+- conclusion
+
+
+
 # Introduction
 
 For our project, we want to explore the relationship between murder rate and happiness score in each country per year. We hypothesize that there will be a negative correlation between the two meaning that the higher the murder rates, the lower happiness scores. This could potentially indicate that safety and security are significant factors in overall happiness.
@@ -39,6 +47,7 @@ happiness <- read_csv("data/hapiscore_whr.csv")
 population <- read_csv("data/pop.csv")
 
 murder_happiness <- read_csv(here::here("data", "murder_happiness.csv"))
+  
 ```
 
 We obtained our data from Gapminder @Gapminder.
@@ -48,7 +57,9 @@ We obtained our data from Gapminder @Gapminder.
 > **happiness**: contains happiness score (converted to 0 to 100 scale to be in terms of percentage) for each country per year.
 
 ## Hypothesized Relationship
-asdfadsf
+
+Before any analysis is done, we anticipate a negative association between average happiness scores and murder rates. It's plausible that higher murder rates would coincide with a worse perception of security, resulting in lower happiness rates.
+There could also be factors such as government instability or even organized crime, which may lower happiness as well as increase murder rates.
 
 ## Data Cleaning
 
@@ -127,11 +138,13 @@ It provides a comprehensive overview of the murder rates and happiness scores ac
 
 # Linear Regression
 
-In this part, we will use linear regression to model the relationship between our two quantitative variables, murder rate and happiness score. We want to see if our hypothesis from above holds true and whether there is a negative correlation between the two variables.
+In this part, we will use linear regression to model the relationship between our two quantitative variables, murder rate (log) and happiness score. We want to see if our hypothesis from above holds true and whether there is a negative association between the two variables.
 
-## Data Visualizations
+## Data Visualization
 
-Here, we will be creating two data visualizations that explore the relationship between our two quantitative variables. Through creative visualizations, we aim to gain a deeper understanding of the relationship between the variables and uncover any interesting patterns or trends that may emerge over time and across countries.
+TODO: edit this, it reads like chatgpt
+
+Here, we will be create two data visualizations that explore the relationship between our two quantitative variables. Through creative visualizations, we aim to gain a deeper understanding of the relationship between the variables and uncover any interesting patterns or trends that may emerge over time and across countries.
 
 ### Relationship between Murder Rate and Happiness Score Over Time
 
@@ -143,13 +156,13 @@ murder_happiness_summary <- murder_happiness |>
   ungroup()
 
 animated_plot <- ggplot(murder_happiness_summary,
-                        aes(x = avg_murder_rate,
+                        aes(x = log(avg_murder_rate),
                             y = avg_happiness_score)) +
   geom_point(color = "steelblue") +
   geom_smooth(method = "lm", color = "black") +
   labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
        subtitle = "Average Happiness Score",
-       x = "Average Murder Rate (per 100k)",
+       x = "Average Murder Rate (per 100k, log scale)",
        y = "",
        caption = "Year: {round(frame_time)}") +
   transition_time(year) +
@@ -161,7 +174,8 @@ animated_plot <- ggplot(murder_happiness_summary,
 animate(animated_plot, renderer = gifski_renderer())
 ```
 
-In this visualization, we have plotted the murder rate per 100k people versus the happiness score from 2005 to 2019 for each country. Contrary to our initial prediction of seeing a negative correlation, as in having lower murder rates for a higher happiness score, we see that there's not much of a correlation between the two. The average murder rate is mostly between 0%-25% for each year and the happiness score has a wide range from 20-80 with no apparent correlation.
+Throughout the years of 2005 to 2019, there seems to be a consistent negative association between average happiness and murder rate (log).
+
 
 ### Relationship Between Murder Rate and Happiness Score
 
@@ -172,21 +186,23 @@ country_murder_happiness <- murder_happiness |>
             avg_happiness_score = mean(happiness_score))
 
 country_murder_happiness |>
-  ggplot(aes(x = avg_murder_rate, 
+  ggplot(aes(x = log(avg_murder_rate), 
              y = avg_happiness_score)
          ) +
     geom_point(color = "steelblue") +
     geom_smooth(method = "lm", color = "black") +
-    labs(title = "Relationship Between Murder Rate and Happiness Score",
+    labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
          subtitle = "Average Happiness Score",
-         x = "Average Murder Rate (per 100k)", 
+         x = "Average Murder Rate (per 100k, log scale)", 
          y = "") +
     theme_bw()
 ```
 
-This plot shows the relationship between the average murder rate per 100k for each country and their overall happiness score. Similar to our previous plot, there is not much correlation between the murder rate and happiness such as an increasing or decreasing happiness score based on the rate of murder.
+This plot shows the relationship between the average murder rate per 100k for each country and their overall happiness score. As with the previous plot, there is a negative association between the overall average murder rate and happiness.
 
-## Linear Regression
+## Modeling
+
+TODO: Mention conditions being met? maybe in a note block
 
 We will be using linear regression as a statistical method to model the relationship between murder rate and happiness score. Then we will use this to evaluate the model fit.
 
@@ -194,14 +210,16 @@ We will be using linear regression as a statistical method to model the relation
 > **y (response)**: average happiness score
 
 ```{r}
-linear_model <- lm(avg_happiness_score~avg_murder_rate, country_murder_happiness)
+linear_model <- lm(avg_happiness_score~log(avg_murder_rate), country_murder_happiness)
 broom::tidy(linear_model) |>
-  knitr::kable(digits = 4)
+  knitr::kable(digits = 2)
 ```
 
-**Predicted Happiness Score = 54.3774 - 0.0591 x Average Murder Rate**
+\begin{equation*}
+\text{Predicted Happiness Score} = 57.77 - 2.81 \times \ln(\text{Murder Rate})
+\end{equation*}
 
-According to the linear regression model, when the murder rate is zero, the predicted happiness score is estimated to be 54.3774. Additionally, the analysis suggests that for each additional murder per 100,000 people, the predicted happiness score decreases by approximately 0.0591 points.
+The linear regression model suggests that for each each unit increase in the natural logarithm of the average murder rate per 100,000 people, the predicted happiness score decreases by approximately -2.81 points.
 
 ## Model Fit
 
@@ -212,7 +230,7 @@ var_resid <- var(linear_model$residuals)
 explained_variation <- var_fitted/var_response
 
 table_data <- data.frame(
-  Variable = c("Response Variable Variance", "Fitted Values Variance", "Residuals Variance", "Explained Variation"),
+  Variable = c("Response Variable Variance", "Fitted Values Variance", "Residuals Variance", "Explained Variation (R^2)"),
   Value = c(var_response, var_fitted, var_resid, explained_variation)
 )
 
@@ -220,13 +238,13 @@ table_data |>
   knitr::kable(digits = 4) 
 ```
 
-The explained variation is 0.00315, which is almost 0. This means that murder rate explains almost none of the variability in happiness. Almost all of the variability in happiness is unaccounted for.
+The explained variation is 0.088. This means that murder rate explains about 9 percent of the variability in happiness in our model.
 
 # Simulation
 
-In this section, we aim to evaluate the performance of our linear regression model by comparing the observed data to simulated data generated using the model's predictions. By simulating data in this manner, we can assess how well the linear regression model captures the underlying relationship between the explanatory and response variables.
+In this section, we aim to evaluate the performance of our linear regression model by comparing the observed data to simulated data generated using the model's predictions. By simulating data in this manner, we can assess how well our model captures the underlying relationship between murder rate and happiness.
 
-## Visualizing Simulations from the Model
+## Visualizing Simulated Data
 
 The comparison between the observed and simulated data will be visualized through side-by-side plots showcasing the relationships modeled by the linear regression for both data sets.
 
@@ -236,7 +254,7 @@ residual_se <- sigma(linear_model)
 simulated_y <- predictions + rnorm(n = length(predictions), mean = 0, sd = residual_se)
 
 observed <- ggplot(country_murder_happiness, 
-             aes(x = avg_murder_rate, 
+             aes(x = log(avg_murder_rate), 
                  y = avg_happiness_score)
              ) +
   geom_point(color = "steelblue") +
@@ -248,7 +266,7 @@ observed <- ggplot(country_murder_happiness,
 
 # Plot Simulated Data
 predicted <- ggplot(country_murder_happiness, 
-             aes(x = avg_murder_rate, 
+             aes(x = log(avg_murder_rate), 
                  y = simulated_y)
              ) +
   geom_point(color = "orange3") +
@@ -260,15 +278,16 @@ predicted <- ggplot(country_murder_happiness,
 
 observed + predicted
 ```
+TODO: update!
 
 Both the simulated and observed data show clustering at lower murder rates, suggesting a possible non-linear relationship or threshold effect not captured by the linear prediction. However, the simulated data seems to have higher predicted happiness scores at lower murder rates. This discrepancy implies that a linear model provides a simplified representation of the relationship between variables, but it may not accurately capture all the variability and intricacies present in the data set. Therefore, relying solely on a linear model might lead to incomplete or inaccurate conclusions about the underlying phenomena being studied.
 
-## Generating Multiple Predictive Checks
+## Full Scale Simulation
 
 ```{r}
 simulated_ys <- map(1:1000, ~ predictions + rnorm(n = length(predictions), mean = 0, sd = residual_se))
 
-simulated_datasets <- map(simulated_ys, ~ data.frame(avg_murder_rate = country_murder_happiness$avg_murder_rate, avg_happiness_score = .x))
+simulated_datasets <- map(simulated_ys, ~ data.frame(avg_murder_rate = log(country_murder_happiness$avg_murder_rate), avg_happiness_score = .x))
 
 # Remove observations with missing values
 simulated_datasets <- map(simulated_datasets, na.omit)
@@ -285,8 +304,9 @@ ggplot(hist_data, aes(x = R_squared)) +
        x = expression("Simulated"~ R^2),
        y = "",
        subtitle = "Number of Simulated Models")
-
 ```
+TODO: Update!
+
 The histogram shows a right-skewed distribution with a higher frequency on the left side and shorter bars as it moves to the right. We see that the simulated datasets have R-squared values between 0 and 0.075. This suggests that the simulated data shows less variability in happiness scores when comparing with the observed data. It is difficult to ascertain on average how much our simulated data account for the variability in the observed happiness score. But from the graph, one could estimate on average it accounts for <1.25% of the variability in the observed happiness score. The spread of the data also has a narrow spread with values concentrated close to 0, which indicates that the simulated data resembles the observed data.
 
 # Conclusion
