@@ -276,7 +276,6 @@ ggplot(data.frame(R_squared = r_squared_values),
        y = "",
        subtitle = "Number of Simulated Models")
 ```
-**TODO: Update!**
 
 The histogram exhibits a right-skewed distribution, with a peak centered around 0.08. A right skewed distribution is expected as the left direction is bounded by 0, while the right is unbounded. The majority of the values seem to fall within the range of 0.03 to 0.14. This suggests that, under similar conditions where the same conditions hold, our model would account for between 3% and 14% of the variability in happiness scores in most cases.
 
