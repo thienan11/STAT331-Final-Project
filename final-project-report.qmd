@@ -204,8 +204,9 @@ var_table <- data.frame(
 var_table |>
   knitr::kable(digits = 4) 
 ```
+The variation of the actual happiness scores is 114.73, while the variance of the happiness scores predicted by our model is 10.14. There is a large difference between these values, meaning that our model does not account for much of the change in the actual data.
 
-The explained variation is 0.088. This means that murder rate explains about 9 percent of the variability in happiness in our model.
+By taking the ratio, we find that the explained variation is 0.088. This means that murder rate explains about 9 percent of the variability in happiness in our model.
 
 # Simulation
 
@@ -247,7 +248,6 @@ predicted <- ggplot(country_murder_happiness,
 
 observed + predicted
 ```
-**TODO: Update!**
 
 Overall, the simulated data looks very similar to the observed data, but there are some differences. The simulated data is more densely gathered around the predicted values, suggesting the observed data is not exactly normally distributed. The predicted data is also noticeably more linear, suggesting the observed data is not entirely linear.
 
