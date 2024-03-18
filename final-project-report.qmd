@@ -192,6 +192,8 @@ The linear regression model suggests that for each unit increase in the natural 
 
 ## Model Fit
 
+To evaluate how well our model performs, we assess the variance in the response values, the variance in the fitted values obtained from our regression model, and the variance in the residuals. By comparing these variances, we gain insight into the overall quality of our regression model and its ability to capture the underlying patterns in the data. Additionally, we calculate the R-squared value, a measure of the explained variation, to gauge the proportion of variance in happiness scores that can be attributed to differences in murder rates.
+
 ```{r}
 var_table <- data.frame(
   Variable = c("Response Variable Variance", "Fitted Values Variance", "Residuals Variance", "Explained Variation (R^2)"),
