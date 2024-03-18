@@ -149,22 +149,23 @@ Here, we will be create two data visualizations that explore the relationship be
 ### Relationship between Murder Rate and Happiness Score Over Time
 
 ```{r}
-country_murder_happiness <- murder_happiness |>
-  group_by(country) |>
-  summarise(avg_murder_rate = mean(murder_rate_per_100k),
-            avg_happiness_score = mean(happiness_score))
+animated_plot <- ggplot(murder_happiness,
+                        aes(x = log(murder_rate_per_100k),
+                            y = happiness_score)) +
+  geom_point(color = "steelblue") +
+  geom_smooth(method = "lm", color = "black") +
+  labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
+       subtitle = "Average Happiness Score",
+       x = "Average Murder Rate (per 100k, log scale)",
+       y = "",
+       caption = "Year: {round(frame_time)}") +
+  transition_time(year) +
+  enter_fade() +
+  exit_fade() +
+  theme_bw() +
+  theme(plot.caption = element_text(size = 10))
 
-country_murder_happiness |>
-  ggplot(aes(x = log(avg_murder_rate), 
-             y = avg_happiness_score)
-         ) +
-    geom_point(color = "steelblue") +
-    geom_smooth(method = "lm", color = "black") +
-    labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
-         subtitle = "Average Happiness Score",
-         x = "Average Murder Rate (per 100k, log scale)", 
-         y = "") +
-    theme_bw()
+animate(animated_plot, renderer = gifski_renderer())
 ```
 
 Throughout the years of 2005 to 2019, there seems to be a consistent negative association between average happiness and murder rate (log).
