@@ -35,10 +35,6 @@ happiness <- read_csv("data/hapiscore_whr.csv")
 population <- read_csv("data/pop.csv")
 ```
 
-TODO:
-- update interpretations to log of average murder rate
-- add region colors to plots
-
 # Introduction
 
 For our project, we want to explore the relationship between murder rate and happiness score in each country per year. Specifically, we will examine how variations in the ***murder rate*** per 100k people (explanatory variable) might influence changes in the ***happiness score*** on a 0 to 100 scale (response variable) across different countries over time.
@@ -53,7 +49,7 @@ We obtained our data from Gapminder @Gapminder.
 
 > **population**: contains total population counts for each country per year.\
 > **murder**: contains total number of estimated deaths from interpersonal violence for each country per year.\
-> **happiness**: contains happiness score (converted to 0 to 100 scale to be in terms of percentage) for each country per year.
+> **happiness**: contains happiness score (0 to 100 scale) for each country per year.
 
 In order to find the relationship between murder rates and happiness score for each country per year, we need to merge the total murders data set and population data set. That way, we can get the murder rate per 100K people.
 
@@ -250,7 +246,7 @@ predicted <- ggplot(country_murder_happiness,
 
 observed + predicted
 ```
-TODO: update!
+*TODO: Update!*
 
 Both the simulated and observed data show clustering at lower murder rates, suggesting a possible non-linear relationship or threshold effect not captured by the linear prediction. However, the simulated data seems to have higher predicted happiness scores at lower murder rates. This discrepancy implies that a linear model provides a simplified representation of the relationship between variables, but it may not accurately capture all the variability and intricacies present in the data set. Therefore, relying solely on a linear model might lead to incomplete or inaccurate conclusions about the underlying phenomena being studied.
 
@@ -275,6 +271,6 @@ ggplot(data.frame(R_squared = r_squared_values),
        y = "",
        subtitle = "Number of Simulated Models")
 ```
-TODO: Update!
+*TODO: Update!*
 
 The histogram shows a right-skewed distribution with a higher frequency on the left side and shorter bars as it moves to the right. We see that the simulated datasets have R-squared values between 0 and 0.075. This suggests that the simulated data shows less variability in happiness scores when comparing with the observed data. It is difficult to ascertain on average how much our simulated data account for the variability in the observed happiness score. But from the graph, one could estimate on average it accounts for <1.25% of the variability in the observed happiness score. The spread of the data also has a narrow spread with values concentrated close to 0, which indicates that the simulated data resembles the observed data.
