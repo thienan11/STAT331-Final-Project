@@ -47,11 +47,11 @@ We hypothesized that there would be a negative association between average happi
 
 We obtained our data from Gapminder @Gapminder. The datasets include:
 
-> **Population**: Contains total population counts for each country per year. There are 197 rows/observations (a country) and 302 columns/variables (1800- 2100).
+> **Population**: Contains total population counts for each country per year. There are 197 rows/observations (a country) and 302 columns/variables (1800-2100).
 
 > **Murders (total deaths)**: Contains total number of estimated deaths from interpersonal violence for each country per year. There are 204 rows/observations (a country) and 31 columns/variables (1990-2019).
 
-> **Happiness Score (WHR)**: Contains happiness score for each country per year, representing the national average response to the question, “Please imagine a ladder, with steps numbered from 0 at the bottom to 10 at the top. The top of the ladder represents the best possible life for you and the bottom of the ladder represents the worst possible life for you. Gapminder has converted it to a 0 to 100 scale so it's in terms of percentage. There are 163 rows/observations (a country) and 19 columns/variables (2005-2022).
+> **Happiness Score (WHR)**: Contains happiness score for each country per year, representing the national average response to the question, “Please imagine a ladder, with steps numbered from 0 at the bottom to 10 at the top. The top of the ladder represents the best possible life for you and the bottom of the ladder represents the worst possible life for you. Gapminder has converted it to a 0 to 100 scale so it is in terms of percentage. There are 163 rows/observations (a country) and 19 columns/variables (2005-2022).
 
 In order to find the relationship between murder rates and happiness score for each country per year, we need to merge the total murders data set and population data set. That way, we can get the murder rate per 100K people. We would also need to convert both datasets into a long format so each row is a unique observation consisting of a country and a year.
 
@@ -220,7 +220,7 @@ Ou goal is to evaluate the performance of our linear regression model by compari
 
 ## Visualizing Simulated Data
 
-The comparison between the observed and simulated data will be visualized through side-by-side plots showcasing the relationships modeled by the linear regression for both data sets.
+To see what the data would look like if it came from our fitted linear regression model, we can simulate possible variations in happiness scores based on the observed murder rates, allowing us to understand the potential range and distribution of happiness scores under different scenarios. The comparison between the observed and simulated data will be visualized through side-by-side plots showcasing the relationships modeled by the linear regression for both data sets.
 
 ```{r}
 set.seed(42)
