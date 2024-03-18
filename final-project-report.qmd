@@ -253,6 +253,8 @@ Both the simulated and observed data show clustering at lower murder rates, sugg
 
 ## Full Scale Simulation
 
+Here, we will generate at least 1000 simulated datasets that we expect to have been observed if the regression model described the relationship between the murder rates and corresponding happiness score. By plotting the R-squared values, we will be able to discuss the implications of the values in the distribution.
+
 ```{r}
 set.seed(42)
 
