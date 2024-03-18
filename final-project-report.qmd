@@ -37,7 +37,7 @@ population <- read_csv("data/pop.csv")
 
 # Introduction
 
-For our project, we want to explore the relationship between murder rate and happiness score in each country per year. Specifically, we will examine how variations in the ***murder rate*** per 100k people (explanatory variable) might influence changes in the ***happiness score*** on a 0 to 100 scale (response variable) across different countries over time.
+For our project, we want to explore the relationship between murder rate and happiness score in each country per year. Specifically, we will examine how variations in the **murder rate** per 100k people (explanatory variable) might influence changes in the **happiness score** on a 0 to 100 scale (response variable) across different countries over time.
 
 While many factors could affect a country's happiness score, such as economic status or weather conditions, delving into this relationship would reveal a significant factor that shapes a country's overall happiness. If there is a correlation between murder and happiness score, it opens up avenues for developing preventative strategies which would help foster safer and happier countries.
 
@@ -45,13 +45,15 @@ We hypothesized that there would be a negative association between average happi
 
 ## Data Cleaning
 
-We obtained our data from Gapminder @Gapminder.
+We obtained our data from Gapminder @Gapminder. The datasets include:
 
-> **population**: contains total population counts for each country per year.\
-> **murder**: contains total number of estimated deaths from interpersonal violence for each country per year.\
-> **happiness**: contains happiness score (0 to 100 scale) for each country per year.
+> **Population**: contains total population counts for each country per year. There are 197 rows/observations (a country) and 302 columns/variables (each year from 1800 to 2100).
 
-In order to find the relationship between murder rates and happiness score for each country per year, we need to merge the total murders data set and population data set. That way, we can get the murder rate per 100K people.
+>**Murders (total deaths)**: contains total number of estimated deaths from interpersonal violence for each country per year. There are 204 rows/observations (a country) and 31 columns/variables (each year from 1990 to 2019).
+
+>**Happiness Score (WHR)**: contains happiness score for each country per year. It contains the national average response to the question of life evaluations asking the following “Please imagine a ladder, with steps numbered from 0 at the bottom to 10 at the top. The top of the ladder represents the best possible life for you and the bottom of the ladder represents the worst possible life for you. Gapminder has converted it to a 0 to 100 scale so it's in terms of percentage. There are 163 rows/observations (a country) and 19 columns/variables (each year from 2005 to 2022).
+
+In order to find the relationship between murder rates and happiness score for each country per year, we need to merge the total murders data set and population data set. That way, we can get the murder rate per 100K people. We would also need to convert both datasets into a long format so each row is a unique observation consisting of a country and a year.
 
 ::: callout-note
 We first have to convert all the values into numbers (i.e. fix cases such as `1.1k` to be `1100`).
@@ -89,7 +91,7 @@ population_clean <- population |>
   mutate(across(population, ~convert_value(.)))
 ```
 
-After cleaning the total murders and population data set, we can merge them to get a data set of the murder rate per 100k people for each country and year. We can then use pivot longer to transform the happiness score data set and merge it with the murder rate per 100k data set to get our final data set.
+After cleaning the total murders and population data set, we can merge them to get a data set of the murder rate per 100k people for each country and year. We can then use pivot longer to transform the happiness score data set into a long format (so each row is a unique country and year) and merge it with the murder rate per 100k data set to get our final data set.
 
 ```{r}
 #| output: false
@@ -106,7 +108,7 @@ murder_happiness <- murder_clean |>
   inner_join(happiness_clean, by = c("country", "year"))
 ```
 
-The final data set contains 1,820 rows and 6 columns. The columns are `country`, `year`, `murder_count`, `population`, `murder_rate_per_100k`, and `happiness_score`.
+We made our final dataset to be between 2005 and 2019 as they were the common years among the datasets. The final data set contains 1,820 rows and 6 columns. The columns are `country`, `year`, `murder_count`, `population`, `murder_rate_per_100k`, and `happiness_score`.
 
 It provides a comprehensive overview of the murder rates and happiness scores across various countries and years. Each entry in the data set corresponds to a unique combination of one out of 162 countries and a year ranging from 2005 to 2019.
 
@@ -140,7 +142,7 @@ animated_plot <- ggplot(murder_happiness,
 animate(animated_plot, renderer = gifski_renderer())
 ```
 
-From 2005 to 2019, there is a consistent negative association between murder rate (log) and happiness score. The countries with higher happiness scores tend to have lower murder rates (log), while those with lower happiness scores tend to have higher murder rates (log). However, the strength of the negative association varies throughout the years going between moderate and weak. One unique observation is that some years have wider ranges of murder rates (log) and happiness scores than other years. 
+From 2005 to 2019, there is a consistent negative association between murder rate (log) and happiness score. The countries with higher happiness scores tend to have lower murder rates (log), while those with lower happiness scores tend to have higher murder rates (log). However, the strength of the negative association varies throughout the years going between moderate and weak. One unique observation is that some years have wider ranges of murder rates (log) and happiness scores than other years. An example is around 2012-2015, there are some countries with really high murder murder rates.
 
 ```{r}
 country_murder_happiness <- murder_happiness |>
@@ -161,7 +163,9 @@ country_murder_happiness |>
     theme_bw()
 ```
 
-For this graph, there seems to be a weak, negative association between the overall average murder rate and happiness score. For different average murder rates (log), there are a lot of high and low average happiness scores. Because of this, there does not appear to be any noticeable outliers or unusual observations. 
+For this graph, there seems to be a weak, negative association between the overall average murder rate and happiness score. This indicates that as the log-scaled average murder rate increases, the average happiness score tends to decrease. 
+
+There seems to be a moderate negative correlation, as the points are somewhat dispersed around the line, indicating that the murder rate might not be the only factor that influences happiness scores. For different average murder rates (log), there are a lot of high and low average happiness scores. Because of this, there does not appear to be any noticeable extreme outliers or unusual observations, but there is some spread in the data, especially in the range of lower murder rates.
 
 ## Modeling
 
