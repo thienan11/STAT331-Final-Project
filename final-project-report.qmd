@@ -116,7 +116,9 @@ It provides a comprehensive overview of the murder rates and happiness scores ac
 
 # Linear Regression
 
-We will use linear regression to model the relationship between our two quantitative variables, murder rate (log) and happiness score. We want to see if our hypothesis from above holds true and whether there is a negative association between the two variables. We opted to take the logarithm of murder rate because we observed a skewed distribution where countries with smaller murder rates occurred more often than those with larger murder rates. This transformation improved linearity, stabilized variance, and enhanced the overall model fit. 
+We will use linear regression to model the relationship between our two quantitative variables, murder rate (log) and happiness score. We want to see if our hypothesis from above holds true and whether there is a negative association between the two variables.
+
+We opted to take the logarithm of murder rate because we observed a skewed distribution where countries with smaller murder rates occurred more often than those with larger murder rates. This transformation improved linearity, stabilized variance, and enhanced the overall model fit. 
 
 ## Data Visualization
 
