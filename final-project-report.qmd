@@ -194,20 +194,23 @@ The linear regression model suggests that for each unit increase in the natural 
 var_table <- data.frame(
   Variable = c("Response Variable Variance", "Fitted Values Variance", "Residuals Variance", "Explained Variation (R^2)"),
   Value = c(
-    var(country_murder_happiness$avg_happiness_score), # Response Variable Variance
-    var(linear_model$fitted.values), # Fitted Values Variance
-    var(linear_model$residuals), # Residuals Variance
-    var(linear_model$fitted.values) / var(country_murder_happiness$avg_happiness_score) # Explained Variation (R^2)
+    var(country_murder_happiness$avg_happiness_score),
+    var(linear_model$fitted.values),
+    var(linear_model$residuals),
+    var(linear_model$fitted.values) / var(country_murder_happiness$avg_happiness_score)
   )
 )
 
 var_table |>
-  knitr::kable(digits = 4) 
+  mutate(
+    Value = round(Value, 2)
+  ) |>
+  knitr::kable(digits = 4)
 ```
 
 The variation of the actual happiness scores is 114.73, while the variance of the happiness scores predicted by our model is 10.14. There is a large difference between these values, meaning that our model does not account for much of the change in the actual data.
 
-By taking the ratio, we find that the explained variation is 0.088. This means that murder rate explains about 9 percent of the variability in happiness in our model.
+By taking the ratio, we find that the explained variation is 0.09. This means that murder rate explains about 9 percent of the variability in happiness in our model.
 
 # Simulation
 
