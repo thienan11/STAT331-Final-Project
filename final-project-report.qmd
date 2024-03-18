@@ -161,7 +161,7 @@ country_murder_happiness |>
     theme_bw()
 ```
 
-This plot shows the relationship between the average murder rate per 100k for each country and their overall happiness score. As with the previous plot, there seems to be a weak, negative association between the overall average murder rate and happiness. For different average murder rates (log), there are a lot of high and low average happiness scores. Because of this, there does not appear to be any noticeable outliers or unusual observations. 
+This plot shows the relationship between the average murder rate for each country and their average happiness score. As with the previous plot, there seems to be a weak, negative association between the overall average murder rate and happiness score. For different average murder rates (log), there are a lot of high and low average happiness scores. Because of this, there does not appear to be any noticeable outliers or unusual observations. 
 
 ## Modeling
 
@@ -178,10 +178,10 @@ broom::tidy(linear_model) |>
 ```
 
 \begin{equation*}
-\text{Predicted Happiness Score} = 57.77 - 2.81 \times \ln(\text{Average Murder Rate})
+\text{Predicted Average Happiness Score} = 57.77 - 2.81 \times \ln(\text{Average Murder Rate})
 \end{equation*}
 
-The linear regression model suggests that for each unit increase in the natural logarithm of the average murder rate per 100k people, the predicted happiness score decreases by approximately -2.81 points.
+The linear regression model suggests that for each unit increase in the natural logarithm of the average murder rate, the predicted average happiness score decreases by approximately -2.81 points. Also, when the natural logarithm of the average murder rate is 0, the predicted average happiness score is 57.77 points.
 
 ## Model Fit
 
