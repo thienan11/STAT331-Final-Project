@@ -255,6 +255,8 @@ In this section, we aim to evaluate the performance of our linear regression mod
 The comparison between the observed and simulated data will be visualized through side-by-side plots showcasing the relationships modeled by the linear regression for both data sets.
 
 ```{r}
+set.seed(42)
+
 predictions <- predict(linear_model, country_murder_happiness)
 residual_se <- sigma(linear_model)
 simulated_y <- predictions + rnorm(n = length(predictions), mean = 0, sd = residual_se)
@@ -291,6 +293,8 @@ Both the simulated and observed data show clustering at lower murder rates, sugg
 ## Full Scale Simulation
 
 ```{r}
+set.seed(42)
+
 simulated_ys <- map(1:1000, ~ predictions + rnorm(n = length(predictions), mean = 0, sd = residual_se))
 
 simulated_datasets <- map(simulated_ys, ~ data.frame(avg_murder_rate = log(country_murder_happiness$avg_murder_rate), avg_happiness_score = .x))
