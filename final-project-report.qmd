@@ -127,8 +127,8 @@ animated_plot <- ggplot(murder_happiness,
   geom_point(color = "steelblue") +
   geom_smooth(method = "lm", color = "black") +
   labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
-       subtitle = "Average Happiness Score",
-       x = "Log-Scaled Average Murder Rate (per 100k)",
+       subtitle = "Happiness Score",
+       x = "Log-Scaled Murder Rate (per 100k)",
        y = "",
        caption = "Year: {frame_time}") +
   transition_time(as.integer(year)) +
@@ -140,7 +140,7 @@ animated_plot <- ggplot(murder_happiness,
 animate(animated_plot, renderer = gifski_renderer())
 ```
 
-From 2005 to 2019, there is a consistent negative association between average murder rate (log) and happiness score. The countries with higher average happiness scores tend to have lower murder rates (log), while those with lower average happiness scores tend to have higher murder rates (log). However, the strength of the negative association varies throughout the years going between moderate and weak. One unique observation is that some years have wider ranges of average murder rates (log) and average happiness scores than other years. 
+From 2005 to 2019, there is a consistent negative association between murder rate (log) and happiness score. The countries with higher happiness scores tend to have lower murder rates (log), while those with lower happiness scores tend to have higher murder rates (log). However, the strength of the negative association varies throughout the years going between moderate and weak. One unique observation is that some years have wider ranges of murder rates (log) and happiness scores than other years. 
 
 ```{r}
 country_murder_happiness <- murder_happiness |>
@@ -161,7 +161,7 @@ country_murder_happiness |>
     theme_bw()
 ```
 
-This plot shows the relationship between the average murder rate for each country and their average happiness score. As with the previous plot, there seems to be a weak, negative association between the overall average murder rate and happiness score. For different average murder rates (log), there are a lot of high and low average happiness scores. Because of this, there does not appear to be any noticeable outliers or unusual observations. 
+As with the previous plot, there seems to be a weak, negative association between the overall average murder rate and happiness score. For different average murder rates (log), there are a lot of high and low average happiness scores. Because of this, there does not appear to be any noticeable outliers or unusual observations. 
 
 ## Modeling
 
