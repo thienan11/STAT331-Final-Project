@@ -174,7 +174,12 @@ Linear regression is appropriate because the LINE conditions are met. There is l
 ```{r}
 linear_model <- lm(avg_happiness_score ~ log(avg_murder_rate), country_murder_happiness)
 broom::tidy(linear_model) |>
-  knitr::kable(digits = 2)
+  mutate(
+    estimate = round(estimate, 2),
+    std.error = round(std.error, 2),
+    statistic = round(statistic, 2),
+  ) |>
+  knitr::kable(digits = 5)
 ```
 
 \begin{equation*}
