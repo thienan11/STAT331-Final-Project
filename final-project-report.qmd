@@ -168,7 +168,7 @@ As with the previous plot, there seems to be a weak, negative association betwee
 We will be using linear regression as a statistical method to model the relationship between murder rate and happiness score. We will then use this method to evaluate the model fit.
 
 ::: callout-note
-Linear regression is appropriate because the LINE conditions are met. There is linearity between the explanatory and response variables, residuals are independent of each other, residuals follow a normal distribution, and the variance of residuals are consistent across all levels of the explanatory variable. 
+Linear regression is appropriate because the LINE conditions are met. There is linearity between the explanatory and response variables, residuals are independent of each other, residuals follow a fairly normal distribution, and the variance of residuals are consistent across all levels of the explanatory variable. 
 :::
 
 ```{r}
@@ -249,7 +249,9 @@ observed + predicted
 ```
 **TODO: Update!**
 
-Both the simulated and observed data show clustering at lower murder rates, suggesting a possible non-linear relationship or threshold effect not captured by the linear prediction. However, the simulated data seems to have higher predicted happiness scores at lower murder rates. This discrepancy implies that a linear model provides a simplified representation of the relationship between variables, but it may not accurately capture all the variability and intricacies present in the data set. Therefore, relying solely on a linear model might lead to incomplete or inaccurate conclusions about the underlying phenomena being studied.
+Overall, the simulated data looks very similar to the observed data, but there are some differences. The simulated data is more densely gathered around the predicted values, suggesting the observed data is not exactly normally distributed. The predicted data is also noticeably more linear, suggesting the observed data is not entirely linear.
+
+These differences have negative implications on the appropriateness of modeling the observed data through linear regression. Despite this, we believe the conditions hold strongly enough that the linear model is relevant.
 
 ## Full Scale Simulation
 
