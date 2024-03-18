@@ -127,7 +127,7 @@ animated_plot <- ggplot(murder_happiness,
   geom_point(color = "steelblue") +
   geom_smooth(method = "lm", color = "black") +
   labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
-       subtitle = "Happiness Score",
+       subtitle = "Happiness Score (0-100)",
        x = "Log-Scaled Murder Rate (per 100k)",
        y = "",
        caption = "Year: {frame_time}") +
@@ -154,18 +154,18 @@ country_murder_happiness |>
          ) +
     geom_point(color = "steelblue") +
     geom_smooth(method = "lm", color = "black") +
-    labs(title = "Relationship Between Murder Rate and Happiness Score (2005-2019)",
-         subtitle = "Average Happiness Score",
+    labs(title = "Relationship Between Average Murder Rate and Happiness Score (2005-2019)",
+         subtitle = "Average Happiness Score (0-100)",
          x = "Log-Scaled Average Murder Rate (per 100k)", 
          y = "") +
     theme_bw()
 ```
 
-As with the previous plot, there seems to be a weak, negative association between the overall average murder rate and happiness score. For different average murder rates (log), there are a lot of high and low average happiness scores. Because of this, there does not appear to be any noticeable outliers or unusual observations. 
+For this graph, there seems to be a weak, negative association between the overall average murder rate and happiness score. For different average murder rates (log), there are a lot of high and low average happiness scores. Because of this, there does not appear to be any noticeable outliers or unusual observations. 
 
 ## Modeling
 
-We will be using linear regression as a statistical method to model the relationship between murder rate and happiness score. We will then use this method to evaluate the model fit.
+We will be using linear regression as a statistical method to model the relationship between murder rate and happiness score. We can then use this method to evaluate the model fit.
 
 ::: callout-note
 Linear regression is appropriate because the LINE conditions are met. There is linearity between the explanatory and response variables, residuals are independent of each other, residuals follow a fairly normal distribution, and the variance of residuals are consistent across all levels of the explanatory variable. 
@@ -204,13 +204,14 @@ var_table <- data.frame(
 var_table |>
   knitr::kable(digits = 4) 
 ```
+
 The variation of the actual happiness scores is 114.73, while the variance of the happiness scores predicted by our model is 10.14. There is a large difference between these values, meaning that our model does not account for much of the change in the actual data.
 
 By taking the ratio, we find that the explained variation is 0.088. This means that murder rate explains about 9 percent of the variability in happiness in our model.
 
 # Simulation
 
-We aim to evaluate the performance of our linear regression model by comparing the observed data to simulated data generated using the model's predictions. By simulating data in this manner, we can assess how well our model captures the underlying relationship between murder rate and happiness.
+Ou goal is to evaluate the performance of our linear regression model by comparing the observed data to simulated data generated using the model's predictions. By simulating data in this manner, we can assess how well our model captures the underlying relationship between average murder rate and happiness.
 
 ## Visualizing Simulated Data
 
@@ -249,13 +250,13 @@ predicted <- ggplot(country_murder_happiness,
 observed + predicted
 ```
 
-Overall, the simulated data looks very similar to the observed data, but there are some differences. The simulated data is more densely gathered around the predicted values, suggesting the observed data is not exactly normally distributed. The predicted data is also noticeably more linear, suggesting the observed data is not entirely linear.
+Overall, the simulated data looks very similar to the observed data, but there are some differences. The simulated data is more densely gathered around the predicted values, suggesting deviations from a perfectly normal distribution within the observed data. The predicted data is also noticeably more linear, suggesting the observed data is not entirely linear.
 
 These differences have negative implications on the appropriateness of modeling the observed data through linear regression. Despite this, we believe the conditions hold strongly enough that the linear model is relevant.
 
 ## Full Scale Simulation
 
-Here, we will generate at least 1000 simulated datasets that we expect to have been observed if the regression model described the relationship between the murder rates and corresponding happiness score. By plotting the R-squared values, we will be able to discuss the implications of the values in the distribution.
+We plan to generate at least 1000 simulated data sets, representing what we would expect to observe if the regression model accurately captured the relationship between average murder rates and average happiness scores. By plotting the R-squared values, we will be able to discuss the implications of the values in the distribution.
 
 ```{r}
 set.seed(42)
@@ -278,4 +279,3 @@ ggplot(data.frame(R_squared = r_squared_values),
 ```
 
 The histogram exhibits a right-skewed distribution, with a peak centered around 0.08. A right skewed distribution is expected as the left direction is bounded by 0, while the right is unbounded. The majority of the values seem to fall within the range of 0.03 to 0.14. This suggests that, under similar conditions where the same conditions hold, our model would account for between 3% and 14% of the variability in happiness scores in most cases.
-
